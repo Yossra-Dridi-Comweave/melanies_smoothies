@@ -18,9 +18,6 @@ st.write('The name on your Smoothie will be:', name_on_order)
 # -------------------------------
 sf = st.secrets["snowflake"]
 import requests
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-#st.text(smoothiefroot_response.json())
-sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
 cnx = snowflake.connector.connect(
     user=sf["user"],
     password=sf["password"],
@@ -63,6 +60,12 @@ if ingredients_list:
         cur.execute(my_insert_stmt, (ingredients_string, name_on_order))
         cnx.commit()
         st.success('Your Smoothie is ordered!')
+    for fruit_chosen in ingredients_list :
+        ingredients_string += fruit_chosen + ' '
+        smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+        sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+        
+        
 
 
 # Close cursor and connection at the end
