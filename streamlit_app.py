@@ -20,11 +20,12 @@ st.write('The name on your Smoothie will be:', name_on_order)
 
 import streamlit as st
 import snowflake.connector
+import pandas as pd
 
 # Récupérer les secrets
 sf = st.secrets["snowflake"]
 
-# Connexion Snowflake
+# Connexion
 cnx = snowflake.connector.connect(
     user=sf["user"],
     password=sf["password"],
@@ -36,16 +37,21 @@ cnx = snowflake.connector.connect(
     client_session_keep_alive=True
 )
 
-# Créer le "session" comme curseur
-session = cnx.cursor()
+# Créer un curseur
+cur = cnx.cursor()
 
-# Exemple de requête
-session.execute("SELECT CURRENT_DATE;")
-st.write("Date actuelle : ", session.fetchone()[0])
+# Exécuter une requête SQL pour récupérer les données
+cur.execute("SELECT * FROM smoothies.public.fruit_options")
 
-# Fermer session et connexion
-session.close()
+# Mettre dans un DataFrame pandas
+my_dataframe = pd.DataFrame(cur.fetchall(), columns=[desc[0] for desc in cur.description])
+
+st.dataframe(my_dataframe)
+
+# Fermer curseur et connexion
+cur.close()
 cnx.close()
+
 
 
 #session = get_active_session()
