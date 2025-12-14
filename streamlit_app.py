@@ -33,7 +33,7 @@ cnx = snowflake.connector.connect(
 cur = cnx.cursor()
 
 # Retrieve fruit options
-cur.execute("SELECT * FROM smoothies.public.fruit_options")
+cur.execute("SELECT FRUIT_NAME, SEARCH_ON FROM smoothies.public.fruit_options")
 my_dataframe = pd.DataFrame(cur.fetchall(), columns=[desc[0] for desc in cur.description])
 st.dataframe(my_dataframe)
 
@@ -42,7 +42,7 @@ st.dataframe(my_dataframe)
 # -------------------------------
 ingredients_list = st.multiselect(
     "Choose up to 5 ingredients: ", 
-    my_dataframe["FRUIT_NAME"].tolist(), 
+    my_dataframe["SEARCH_ON"].tolist(), 
     max_selections=5
 )
 
