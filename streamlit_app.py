@@ -19,7 +19,7 @@ st.write('The name on your Smoothie will be:', name_on_order)
 sf = st.secrets["snowflake"]
 import requests
 smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-st.text(smoothiefroot_response)
+st.text(smoothiefroot_response.json())
 cnx = snowflake.connector.connect(
     user=sf["user"],
     password=sf["password"],
