@@ -36,7 +36,7 @@ cur = cnx.cursor()
 cur.execute("SELECT FRUIT_NAME, SEARCH_ON FROM smoothies.public.fruit_options")
 my_dataframe = pd.DataFrame(cur.fetchall(), columns=[desc[0] for desc in cur.description])
 st.dataframe(my_dataframe)
-pd_df = my_dtaframe.to_pandas()
+pd_df = my_dataframe.to_pandas()
 
 # -------------------------------
 # Smoothie order logic
