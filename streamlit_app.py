@@ -19,7 +19,7 @@ st.write('The name on your Smoothie will be:', name_on_order)
 # st.write('Your favorite fruit is', option)
 
 cnx = st.connection("snowflake")
-seesion = cnx.session()
+session = cnx.session()
 
 # N'oublie pas de fermer le curseur et la connexion à la fin
 session.close()
