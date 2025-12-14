@@ -36,6 +36,7 @@ cur = cnx.cursor()
 cur.execute("SELECT FRUIT_NAME, SEARCH_ON FROM smoothies.public.fruit_options")
 my_dataframe = pd.DataFrame(cur.fetchall(), columns=[desc[0] for desc in cur.description])
 st.dataframe(my_dataframe)
+pd_df = my_dtaframe.to_pandas()
 
 # -------------------------------
 # Smoothie order logic
@@ -62,6 +63,8 @@ if ingredients_list:
         st.success('Your Smoothie is ordered!')
     for fruit_chosen in ingredients_list :
         ingredients_string += fruit_chosen + ' '
+        search_on = pd_df.loc[pd_df['FRUIT_NAME'] == friut_chosen, 'SEARCH_ON'].iloc[0]
+        st.write('The search value for ',chosen_fruit, ' is ',search_on,'.')
         st.subheader(fruit_chosen + 'Nutrition Information')
         smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/"+fruit_chosen)
         sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
