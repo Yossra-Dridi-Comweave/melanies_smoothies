@@ -18,8 +18,31 @@ st.write('The name on your Smoothie will be:', name_on_order)
 # )
 # st.write('Your favorite fruit is', option)
 
-cnx = st.connection("snowflake")
-seesion = cnx.session()
+import streamlit as st
+import snowflake.connector
+
+# Récupérer les secrets
+sf = st.secrets["snowflake"]
+
+# Connexion Snowflake
+cnx = snowflake.connector.connect(
+    user=sf["user"],
+    password=sf["password"],
+    account=sf["account"],
+    role=sf["role"],
+    warehouse=sf["warehouse"],
+    database=sf["database"],
+    schema=sf["schema"],
+    client_session_keep_alive=sf["client_session_keep_alive"]
+)
+
+# Créer un curseur pour exécuter des requêtes
+cur = cnx.cursor()
+cur.execute("SELECT CURRENT_DATE;")
+date = cur.fetchone()[0]
+
+st.write("Connexion réussie ! Date actuelle : ", date)
+
 #session = get_active_session()
 my_dataframe = session.table("smoothies.public.fruit_options").to_pandas()
 #my_dataframe = session.table("smoothies.public.orders").filter(col("ORDER_FILLED")==0).collect()
