@@ -36,12 +36,18 @@ cnx = snowflake.connector.connect(
     client_session_keep_alive=sf["client_session_keep_alive"]
 )
 
-# Créer un curseur pour exécuter des requêtes
-cur = cnx.cursor()
-cur.execute("SELECT CURRENT_DATE;")
-date = cur.fetchone()[0]
+# Ici on crée la "session" pour exécuter les requêtes
+session = cnx.cursor()
+
+# Exemple d'utilisation
+session.execute("SELECT CURRENT_DATE;")
+date = session.fetchone()[0]
 
 st.write("Connexion réussie ! Date actuelle : ", date)
+
+# N'oublie pas de fermer le curseur et la connexion à la fin
+session.close()
+cnx.close()
 
 #session = get_active_session()
 my_dataframe = session.table("smoothies.public.fruit_options").to_pandas()
