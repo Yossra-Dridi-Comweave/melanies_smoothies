@@ -47,23 +47,20 @@ ingredients_list = st.multiselect(
 )
 
 if ingredients_list:
-    # Concatenate selected ingredients
     ingredients_string = ', '.join(ingredients_list)
-    st.write("Ingredients selected:", ingredients_string) 
+    st.write("Ingredients selected:", ingredients_string)
 
-    # Prepare SQL insert statement
-    my_insert_stmt = f"""
-        INSERT INTO smoothies.public.orders (ingredients, name_on_order) 
-        VALUES (%s, %s)
+    my_insert_stmt = """
+        INSERT INTO smoothies.public.orders (ingredients, name_on_order)
+        VALUES (?, ?)
     """
 
-    # Submit button
     time_to_insert = st.button("Submit Order")
     if time_to_insert:
-        # Use parameterized query to avoid SQL injection
         cur.execute(my_insert_stmt, (ingredients_string, name_on_order))
-        cnx.commit()  # Commit the transaction
+        cnx.commit()
         st.success('Your Smoothie is ordered!')
+
 
 # Close cursor and connection at the end
 cur.close()
